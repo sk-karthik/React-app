@@ -43,7 +43,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     // the initial application state
-    this.state = { user: null }
+    this.state = { user: localStorage.getItem('loginState') || null }
   }
   componentDidMount() {
     if (!this.state.user) {
@@ -72,7 +72,7 @@ class App extends React.Component {
                     <li><NavLink activeClassName="active" to="/Logout">Logout</NavLink></li>
                   </ul>
                   <Switch>
-                    <Route exact path="/" component={LoginPage} />
+                    <Route exact path="/" component={Dashboard} />
                     <Route path="/dashboard" component={Dashboard} />
                     <Route path="/About" component={About} />
                     <Route path="/Logout" component={LoginPage} />

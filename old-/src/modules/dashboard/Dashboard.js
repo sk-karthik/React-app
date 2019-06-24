@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import LoginForm from './LoginForm';
-import { tsConstructorType } from '@babel/types';
+import DashboardView from './DashboardView';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -28,10 +27,16 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function LoginPage(props) {
-    console.log(props);
+
+/* export default function SignIn() { */
+
+
+
+export default function Dashboard() {
     const classes = useStyles();
+
     return (
-        <LoginForm classes={classes} loginState={props} />
+        <DashboardView classes={classes} />
     );
+
 }
