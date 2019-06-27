@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
 const Dashboard = ({ history }) => {
     const classes = useStyles();
     if (!isLoggedIn()) {
-        return <Redirect to="/login" />
+        return <Redirect to="/login" history={history} />
     }
 
     return (

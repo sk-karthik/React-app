@@ -12,7 +12,7 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 
 import store from 'store';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import isLoggedIn from '../../_helpers/isLoggedIn';
 import Alert from '../_shared/Alert';
 
@@ -27,29 +27,28 @@ class LoginForm extends Component {
             classes: this.props.classes,
             isLoading: false
         }
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange(e, { name, value }) {
-        this.setState({ error: false });
-        this.setState({ [name]: value });
     }
 
     handleSubmit = (values, {
         props = this.props,
         setSubmitting
     }) => {
-        // console.log(this.props);
         const { history } = this.props;
         var self = this;
         this.setState({ isLoading: true });
         //For testing sample username and password validation
-        /*  if (!(username === 'george' && password === 'foreman')) {
-             return this.setState({ error: true });
-         }
-         console.log("you're logged in. yay!");
-         store.set('isLoggedIn', true); */
+        if (!(values.userid === 'admin' && values.password === 'testing')) {
+            this.setState({ error: true, message: "UserName or Password is incorrect. Try again!" });
+            setSubmitting(false);
+            self.setState({ isLoading: false });
+            return;
+        }
+        console.log("you're logged in. yay!");
+        store.set('isLoggedIn', true);
+        history.push('/dashboard');
+        return;
+
         fetch('http://ec2-xx-xx-xx-xx.compute-1.amazonaws.com:9000/api/v1/userAuth', {
             method: 'POST',
             headers: {
@@ -59,7 +58,7 @@ class LoginForm extends Component {
             body: JSON.stringify(values)
         })
             .then(function (response) {
-                console.log(response);
+
                 if (response.ok) {
                     return response.json();
                 } else {
@@ -69,9 +68,7 @@ class LoginForm extends Component {
                 }
             }).then(function (responseBody) {
                 if (responseBody.msg === 'OK') {
-                    localStorage.setItem('loginState', JSON.stringify(values));
-                    // self.loginStateChange(JSON.stringify(values));
-                    // self.setState({ user: JSON.stringify(values) });
+                    // localStorage.setItem('loginState', JSON.stringify(values));
                     store.set('isLoggedIn', true);
                     history.push('/dashboard');
                     return;
@@ -162,4 +159,4 @@ class LoginForm extends Component {
         )
     }
 }
-export default LoginForm;
+export default withRouter(LoginForm);

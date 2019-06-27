@@ -36,15 +36,10 @@ class About extends Component {
 
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-    // the initial application state
-  }
 
   render() {
     return (
       <div>
-
         <Switch>
           <Route exact path="/" component={Dashboard} />
           <Route path="/login" component={LoginPage} />

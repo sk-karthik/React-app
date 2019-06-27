@@ -29,15 +29,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function LoginView() {
+
     const classes = useStyles();
     return <LoginForm classes={classes} />
 }
 
 class LoginPage extends Component {
-
+   
     render() {
         return (
-            <LoginView />
+            <div> <LoginView /></div>
         );
     }
 }

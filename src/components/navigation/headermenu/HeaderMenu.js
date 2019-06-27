@@ -25,7 +25,6 @@ const handleLogout = history => () => {
     history.push('/login');
 };
 const Navbar = ({ history }) => {
-    console.log(history);
     const classes = useStyles();
     return (
         <div className={classes.root}>
