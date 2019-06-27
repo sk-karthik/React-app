@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import LoginForm from './LoginForm';
-import { tsConstructorType } from '@babel/types';
+
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -28,10 +28,18 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function LoginPage(props) {
-    console.log(props);
+function LoginView() {
     const classes = useStyles();
-    return (
-        <LoginForm classes={classes} loginState={props} />
-    );
+    return <LoginForm classes={classes} />
 }
+
+class LoginPage extends Component {
+
+    render() {
+        return (
+            <LoginView />
+        );
+    }
+}
+
+export default LoginPage;

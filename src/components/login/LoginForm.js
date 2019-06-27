@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-//import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -12,22 +11,91 @@ import { TextField } from 'formik-material-ui';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 
+import store from 'store';
+import { Redirect } from 'react-router-dom';
+import isLoggedIn from '../../_helpers/isLoggedIn';
+import Alert from '../_shared/Alert';
+
 class LoginForm extends Component {
     constructor(props) {
-        console.log(props);
-        //  console.log(this.state);
         super(props);
         this.state = {
+            userid: '',
+            password: '',
+            error: false,
+            message: '',
             classes: this.props.classes,
             isLoading: false
         }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
-    loginStateChange(loginVlaue) {
-        this.setState({ user: loginVlaue });
-        console.log(loginVlaue);
-        //  this.props.history.push("/Dashboard");
+
+    handleChange(e, { name, value }) {
+        this.setState({ error: false });
+        this.setState({ [name]: value });
     }
+
+    handleSubmit = (values, {
+        props = this.props,
+        setSubmitting
+    }) => {
+        // console.log(this.props);
+        const { history } = this.props;
+        var self = this;
+        this.setState({ isLoading: true });
+        //For testing sample username and password validation
+        /*  if (!(username === 'george' && password === 'foreman')) {
+             return this.setState({ error: true });
+         }
+         console.log("you're logged in. yay!");
+         store.set('isLoggedIn', true); */
+        fetch('http://ec2-xx-xx-xx-xx.compute-1.amazonaws.com:9000/api/v1/userAuth', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(values)
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    self.setState({ error: true, message: "Failed to submit form, Try again!" });
+                    setSubmitting(false);
+                    self.setState({ isLoading: false });
+                }
+            }).then(function (responseBody) {
+                if (responseBody.msg === 'OK') {
+                    localStorage.setItem('loginState', JSON.stringify(values));
+                    // self.loginStateChange(JSON.stringify(values));
+                    // self.setState({ user: JSON.stringify(values) });
+                    store.set('isLoggedIn', true);
+                    history.push('/dashboard');
+                    return;
+                } else {
+                    self.setState({ error: true, message: "UserName or Password is incorrect. Try again!" });
+                    setSubmitting(false);
+                    self.setState({ isLoading: false });
+                }
+            })
+            .catch(function (error) {
+                self.setState({ error: true, message: "Failed to submit form, Try again!" });
+                setSubmitting(false);
+                self.setState({ isLoading: false });
+            })
+        return;
+    }
+
     render() {
+
+        const { error, message } = this.state;
+
+        if (isLoggedIn()) {
+            return <Redirect to="/dashboard" />;
+        }
         const validationFrom = Yup.object().shape({
             userid: Yup.string()
                 .required('User ID is required')
@@ -45,43 +113,9 @@ class LoginForm extends Component {
             <Formik
                 initialValues={initialFormValues}
                 validationSchema={validationFrom}
-                onSubmit={(values, actions) => {
-                    var self = this;
-                    this.setState({ isLoading: true });
-                    actions.setSubmitting(false);
-                    // actions.resetForm(initialFormValues);
-                    fetch('http://ec2-35-169-251-74.compute-1.amazonaws.com:9000/api/v1/userAuth', {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(values)
-                    })
-                        .then(function (response) {
-                            console.log(response);
-                            if (response.ok) {
-                                return response.json();
-                            } {
-                                throw new Error("Post Failed")
-                            }
-                        }).then(function (responseBody) {
-                            if (responseBody.msg == 'OK') {
-                                localStorage.setItem('loginState', JSON.stringify(values));
-                                self.loginStateChange(JSON.stringify(values));
-                                // this.setState({ user: JSON.stringify(values) });
-
-                            } else {
-                                return new Error(responseBody.msg);
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log("Request failed", error);
-                        })
-                }
-                }
+                onSubmit={this.handleSubmit}
                 render={({ submitForm, isSubmitting, isValid }) => (
-                    <Form  >
+                    <Form>
                         <Container component="main" maxWidth="xs" >
                             <CssBaseline />
                             <div className={this.state.classes.paper}>
@@ -91,6 +125,11 @@ class LoginForm extends Component {
                                 <Typography component="h1" variant="h5">
                                     Sign in
                                 </Typography>
+                                {error ? <Alert
+                                    status="error"
+                                    alert={error}
+                                    content={message}
+                                /> : ''}
 
                                 <Field
                                     variant="outlined" margin="normal" fullWidth label="User ID" name="userid" id="userid" type="text"

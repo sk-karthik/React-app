@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import logo from '../logo.svg';
 import './App.css';
 
-import { Route, Link, Switch, NavLink, BrowserRouter as Router } from 'react-router-dom'
-import Dashboard from '../modules/dashboard/Dashboard';
-import LoginPage from '../modules/login/LoginPage';
+import { Route, Switch } from 'react-router-dom'
+import Dashboard from '../components/dashboard/Dashboard';
+import LoginPage from '../components/login/LoginPage';
 import Container from '@material-ui/core/Container';
-
-//import Demo from './demo';
-//import Ikmatui from './Ikmatui';
-
 
 // More components
 class About extends Component {
@@ -43,50 +39,22 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     // the initial application state
-    this.state = { user: null }
-  }
-  componentDidMount() {
-    if (!this.state.user) {
-
-    }
-  }
-  Logout() {
-    localStorage.removeItem('loginState');
-    this.setState({ user: null });
-    console.log('asdasd');
-
   }
 
   render() {
     return (
       <div>
-        {
-          (this.state.user) ?
-            <div>
-              <Router>
-                <div>
-                  <ul>
-                    <li><NavLink exact activeClassName="active" to="/">Home</NavLink></li>
-                    <li><NavLink activeClassName="active" to="/Dashboard">Dashboard</NavLink></li>
-                    <li><NavLink activeClassName="active" to="/About">About</NavLink></li>
-                    <li><NavLink activeClassName="active" to="/Logout">Logout</NavLink></li>
-                  </ul>
-                  <Switch>
-                    <Route exact path="/" component={LoginPage} />
-                    <Route path="/dashboard" component={Dashboard} />
-                    <Route path="/About" component={About} />
-                    <Route path="/Logout" component={LoginPage} />
-                  </Switch>
-                </div>
-              </Router>
-            </div>
-            :
-            <LoginPage user={this.state.user} />
-        }
+
+        <Switch>
+          <Route exact path="/" component={Dashboard} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/about" component={About} />
+        </Switch>
       </div >
     )
   }
 }
 
 export default App;
-//https://jasonwatmore.com/post/2019/04/06/react-jwt-authentication-tutorial-example
+//https://scotch.io/courses/using-react-router-4/authentication-with-redirect

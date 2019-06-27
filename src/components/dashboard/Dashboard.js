@@ -1,7 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import DashboardView from './DashboardView';
+import Menu from '../navigation/headermenu/HeaderMenu';
 
+import { Redirect } from 'react-router-dom';
+import isLoggedIn from '../../_helpers/isLoggedIn';
 const useStyles = makeStyles(theme => ({
     '@global': {
         body: {
@@ -28,15 +31,32 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
+
+
 /* export default function SignIn() { */
 
+const Dashboard = ({ history }) => {
+    const classes = useStyles();
+    if (!isLoggedIn()) {
+        return <Redirect to="/login" />
+    }
+
+    return (
+        <React.Fragment>
+            <Menu history={history} />
+            <DashboardView classes={classes} />
+        </React.Fragment>
+    );
+};
+
+export default Dashboard;
 
 
-export default function Dashboard() {
+/* export default function Dashboard() {
     const classes = useStyles();
 
     return (
         <DashboardView classes={classes} />
     );
-
 }
+ */
