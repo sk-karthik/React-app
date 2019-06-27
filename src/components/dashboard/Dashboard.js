@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import DashboardView from './DashboardView';
-import Menu from '../navigation/headermenu/HeaderMenu';
+import Menu from '../navigation/HeaderMenu';
 
 import { Redirect } from 'react-router-dom';
 import isLoggedIn from '../../_helpers/isLoggedIn';

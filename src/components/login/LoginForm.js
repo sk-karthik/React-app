@@ -49,7 +49,7 @@ class LoginForm extends Component {
         history.push('/dashboard');
         return;
 
-        fetch('http://ec2-xx-xx-xx-xx.compute-1.amazonaws.com:9000/api/v1/userAuth', {
+        fetch('http://ec2-35-169-251-74.compute-1.amazonaws.com:9000/api/v1/userAuth', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
