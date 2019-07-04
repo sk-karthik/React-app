@@ -44,3 +44,4 @@ class LoginPage extends Component {
 }
 
 export default LoginPage;
+//https://scotch.io/courses/using-react-router-4/authentication-with-redirect
