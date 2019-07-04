@@ -62,24 +62,3 @@ class About extends React.Component {
     }
 }
 export default withRouter(withStyles(useStyles)(About));
-
-/* const About = ({ history }) => {
-    const classes = useStyles();
-    if (!isLoggedIn()) {
-        return <Redirect to="/login" history={history} />
-    }
-    return (
-        <Container component="main" maxWidth="xs" >
-            <CssBaseline />
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Welcome to About Page
-                    </Typography>
-            </div>
-        </Container>
-    );
-
-} */

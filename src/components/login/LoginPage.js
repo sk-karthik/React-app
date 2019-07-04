@@ -35,7 +35,7 @@ function LoginView() {
 }
 
 class LoginPage extends Component {
-   
+
     render() {
         return (
             <div> <LoginView /></div>
